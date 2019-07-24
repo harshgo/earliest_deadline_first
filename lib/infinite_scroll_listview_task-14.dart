@@ -6,13 +6,15 @@ import 'filemanager.dart';
 
 class InfiniteScrollListView extends StatefulWidget {
   final List<Task> ListViewData;
-  InfiniteScrollListView({Key key, @required this.ListViewData}): super(key: key);
+
+  InfiniteScrollListView({Key key, @required this.ListViewData})
+      : super(key: key);
+
   _InfiniteScrollListViewState createState() => _InfiniteScrollListViewState();
 }
 
 class _InfiniteScrollListViewState extends State<InfiniteScrollListView> {
   ScrollController _scrollController = ScrollController();
-
 
   @override
   void initState() {
@@ -53,11 +55,15 @@ class _InfiniteScrollListViewState extends State<InfiniteScrollListView> {
               await fm.writeToFile(this.widget.ListViewData);
 
               // Show a snackbar. This snackbar could also contain "Undo" actions.
-              Scaffold
-                  .of(context)
-                  .showSnackBar(SnackBar(content: Text("$item.name dismissed")));
+              Scaffold.of(context)
+                  .showSnackBar(SnackBar(content: Text("$itemText dismissed")));
             },
-            child: ListTile(title: Text('$itemText')),
+            child: Container(
+              child: ListTile(title: Text('$itemText')),
+              decoration: BoxDecoration(
+                  border: Border(bottom: BorderSide(color: Colors.grey))),
+            ),
+            background: Container(color: Colors.red),
           );
         },
       ),
@@ -66,7 +72,8 @@ class _InfiniteScrollListViewState extends State<InfiniteScrollListView> {
           Navigator.push(
               context,
               MaterialPageRoute(
-                  builder: (context) => GetInput(taskList: this.widget.ListViewData)));
+                  builder: (context) =>
+                      GetInput(taskList: this.widget.ListViewData)));
         },
         child: Icon(Icons.add),
       ),

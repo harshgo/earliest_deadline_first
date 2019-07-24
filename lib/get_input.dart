@@ -59,8 +59,14 @@ class _GetInputState extends State<GetInput> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          this.widget.taskList.add(Task.fromInput(textEditingController.text, this._date, this._time));
-          this.widget.taskList.sort();
+          String text = textEditingController.text.trim();
+          if (text != "") {
+            this
+                .widget
+                .taskList
+                .add(Task.fromInput(text, this._date, this._time));
+            this.widget.taskList.sort();
+          }
           fm.writeToFile(this.widget.taskList);
           Navigator.pop(context);
         },
