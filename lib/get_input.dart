@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'filemanager.dart';
+import 'date_time_picker.dart';
 
 class GetInput extends StatefulWidget {
   final List<String> taskList;
 
-  GetInput({Key key, @required this.taskList}): super(key: key);
+  GetInput({Key key, @required this.taskList}) : super(key: key);
 
   @override
   _GetInputState createState() => _GetInputState();
@@ -13,6 +14,9 @@ class GetInput extends StatefulWidget {
 class _GetInputState extends State<GetInput> {
   final textEditingController = TextEditingController();
   final FileManager fm = FileManager();
+
+  DateTime _date = DateTime.now();
+  TimeOfDay _time = const TimeOfDay(hour: 23, minute: 59);
 
   @override
   void dispose() {
@@ -28,8 +32,28 @@ class _GetInputState extends State<GetInput> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: TextField(
-          controller: textEditingController,
+        child: Column(
+          children: <Widget>[
+            TextField(
+              decoration: InputDecoration(labelText: "Task name"),
+              controller: textEditingController,
+            ),
+            DateTimePicker(
+              labelText: 'Choose deadline',
+              selectedDate: _date,
+              selectedTime: _time,
+              selectDate: (DateTime date) {
+                setState(() {
+                  _date = date;
+                });
+              },
+              selectTime: (TimeOfDay time) {
+                setState(() {
+                  _time = time;
+                });
+              },
+            ),
+          ],
         ),
       ),
       floatingActionButton: FloatingActionButton(
