@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
+import 'task.dart';
 import 'get_input.dart';
 import 'filemanager.dart';
 
 class InfiniteScrollListView extends StatefulWidget {
-  final List<String> ListViewData;
+  final List<Task> ListViewData;
   InfiniteScrollListView({Key key, @required this.ListViewData}): super(key: key);
   _InfiniteScrollListViewState createState() => _InfiniteScrollListViewState();
 }
@@ -36,10 +37,11 @@ class _InfiniteScrollListViewState extends State<InfiniteScrollListView> {
         controller: _scrollController,
         itemBuilder: (context, index) {
           final item = this.widget.ListViewData[index];
+          final itemText = item.name;
           return Dismissible(
             // Each Dismissible must contain a Key. Keys allow Flutter to
             // uniquely identify widgets.
-            key: Key(item),
+            key: Key(item.hashCode.toString()),
             // Provide a function that tells the app
             // what to do after an item has been swiped away.
             onDismissed: (direction) async {
@@ -53,9 +55,9 @@ class _InfiniteScrollListViewState extends State<InfiniteScrollListView> {
               // Show a snackbar. This snackbar could also contain "Undo" actions.
               Scaffold
                   .of(context)
-                  .showSnackBar(SnackBar(content: Text("$item dismissed")));
+                  .showSnackBar(SnackBar(content: Text("$item.name dismissed")));
             },
-            child: ListTile(title: Text('$item')),
+            child: ListTile(title: Text('$itemText')),
           );
         },
       ),

@@ -1,20 +1,40 @@
 import 'dart:io';
 import 'package:path_provider/path_provider.dart';
+import 'dart:convert';
+import 'task.dart';
 
 class FileManager {
-  Future<List<String>> get populateFromFile async {
+  Future<List<Task>> get populateFromFile async {
     File file = await _localFile;
     bool exists = await file.exists();
     if(!exists) {
       file.create();
     }
     String contents = await file.readAsString();
-    return contents.split("\n");
+    if(contents.compareTo("") == 0) {
+      return List<Task>();
+    }
+    List deserielized = jsonDecode(contents);
+    List result = List<Task>();
+    for (Map item in deserielized) {
+      result.add(Task(item["name"], DateTime.parse(item["time"])));
+    }
+//    print("Result is");
+//    print(result);
+//    print("\n");
+//    result = List<Task>();
+//    result.add(Task("hello", DateTime(1997)));
+    result.sort();
+    return result;
   }
 
-  Future<void> writeToFile(List<String> data) async {
+  Future<void> writeToFile(List<Task> data) async {
     File file = await _localFile;
-    String contents = data.join("\n");
+    List<Map<String, String>> output = [];
+    for (Task task in data) {
+      output.add({"name": task.name, "time": task.dateTime.toString()});
+    }
+    String contents = jsonEncode(output);
     await file.writeAsString(contents);
   }
 
@@ -25,6 +45,6 @@ class FileManager {
 
   Future<File> get _localFile async {
     final path = await _localPath;
-    return File('$path/tasks.txt');
+    return File('$path/tasksUpdated.txt');
   }
 }

@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'filemanager.dart';
 import 'date_time_picker.dart';
+import 'task.dart';
 
 class GetInput extends StatefulWidget {
-  final List<String> taskList;
+  final List<Task> taskList;
 
   GetInput({Key key, @required this.taskList}) : super(key: key);
 
@@ -58,7 +59,8 @@ class _GetInputState extends State<GetInput> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          this.widget.taskList.add(textEditingController.text);
+          this.widget.taskList.add(Task.fromInput(textEditingController.text, this._date, this._time));
+          this.widget.taskList.sort();
           fm.writeToFile(this.widget.taskList);
           Navigator.pop(context);
         },
