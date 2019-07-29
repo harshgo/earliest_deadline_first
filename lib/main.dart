@@ -28,7 +28,7 @@ class MyApp extends StatelessWidget {
           future: FileManager().populateFromFile,
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.done) {
-              return InfiniteScrollListView(ListViewData: snapshot.data);
+              return InfiniteScrollListView(listViewData: snapshot.data);
             } else {
               return Center(
                   child: SizedBox(
