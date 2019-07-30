@@ -14,9 +14,9 @@ class FileManager {
     if(contents.compareTo('') == 0) {
       return TaskSet();
     }
-    final List<Object> deserielized = jsonDecode(contents);
+    final List<Object> deserialized = jsonDecode(contents);
     final TaskSet result = TaskSet();
-    for (Map<String, String> item in deserielized) {
+    for (Map<String, dynamic> item in deserialized) {
       result.add(item['name'], DateTime.parse(item['time']));
     }
     return result;

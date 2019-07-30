@@ -28,6 +28,13 @@ class MyApp extends StatelessWidget {
         home: FutureBuilder<TaskSet>(
           future: FileManager().populateFromFile,
           builder: (BuildContext context, AsyncSnapshot<TaskSet> snapshot) {
+            if (snapshot.hasError) {
+              return Center(
+                child: Text(
+                  'ERROR: ' + snapshot.error.toString(),
+                ),
+              );
+            }
             if (snapshot.connectionState == ConnectionState.done) {
               return InfiniteScrollListView(tasks: snapshot.data);
             } else {
