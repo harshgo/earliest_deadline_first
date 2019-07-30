@@ -1,31 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
-import 'task.dart';
 import 'get_input.dart';
+import 'task.dart';
 import 'task_tile.dart';
-import 'filemanager.dart';
 
 class InfiniteScrollListView extends StatefulWidget {
-  final List<Task> listViewData;
-
-  InfiniteScrollListView({Key key, @required this.listViewData})
+  const InfiniteScrollListView({Key key, @required this.tasks})
       : super(key: key);
 
+  final TaskSet tasks;
+
+  @override
   _InfiniteScrollListViewState createState() => _InfiniteScrollListViewState();
 }
 
 class _InfiniteScrollListViewState extends State<InfiniteScrollListView> {
-  ScrollController _scrollController = ScrollController();
-
-  @override
-  void initState() {
-    super.initState();
-  }
+  final ScrollController _scrollController = ScrollController();
 
   @override
   void dispose() {
     _scrollController.dispose();
-    debugPrint("dispose called");
     super.dispose();
   }
 
@@ -33,49 +27,49 @@ class _InfiniteScrollListViewState extends State<InfiniteScrollListView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Earliest Deadline First'),
+        title: const Text('Earliest Deadline First'),
       ),
       body: ListView.builder(
-        itemCount: this.widget.listViewData.length,
+        itemCount: widget.tasks.length,
         controller: _scrollController,
-        itemBuilder: (context, index) {
-          final item = this.widget.listViewData[index];
-          String itemText = item.name;
+        itemBuilder: (BuildContext context, int index) {
+          final Task item = widget.tasks[index];
           return Dismissible(
             // Each Dismissible must contain a Key. Keys allow Flutter to
             // uniquely identify widgets.
-              key: Key(item.hashCode.toString()),
-              // Provide a function that tells the app
-              // what to do after an item has been swiped away.
-              onDismissed: (direction) async {
-                // Remove the item from the data source.
-                setState(() {
-                  this.widget.listViewData.removeAt(index);
-                });
-                final FileManager fm = FileManager();
-                await fm.writeToFile(this.widget.listViewData);
+            key: Key(item.hashCode.toString()),
+            // Provide a function that tells the app
+            // what to do after an item has been swiped away.
+            onDismissed: (DismissDirection direction) async {
+              // Remove the item from the data source.
+              setState(() {
+                widget.tasks.removeAt(index);
+              });
 
-                // Show a snackbar. This snackbar could also contain "Undo" actions.
-                Scaffold.of(context)
-                    .showSnackBar(
-                    SnackBar(content: Text("$itemText dismissed")));
-              },
-              child: TaskTile(this.widget.listViewData[index]),
-              background: Container(color: Colors.red),);
-
+              // Show a snackbar. This snackbar could also contain "Undo" actions.
+              Scaffold.of(context)
+                  .showSnackBar(SnackBar(content: Text('${item.name} dismissed')));
+            },
+            child: TaskTile(widget.tasks[index], callback),
+            background: Container(color: Colors.red),
+          );
         },
-
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.push(
               context,
-              MaterialPageRoute(
-                  builder: (context) =>
-                      GetInput(taskList: this.widget.listViewData)));
+              MaterialPageRoute<GetInput>(
+                  builder: (BuildContext context) => GetInput(taskList: widget.tasks)));
         },
         child: Icon(Icons.add),
       ),
     );
+  }
+
+  void callback() {
+    setState(() {
+      widget.tasks.sort();
+    });
   }
 }

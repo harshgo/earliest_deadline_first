@@ -1,20 +1,17 @@
 import 'package:flutter/material.dart';
-import 'filemanager.dart';
 import 'date_time_picker.dart';
 import 'task.dart';
 
 class GetInput extends StatefulWidget {
-  final List<Task> taskList;
-
-  GetInput({Key key, @required this.taskList}) : super(key: key);
+  const GetInput({Key key, @required this.taskList}) : super(key: key);
+  final TaskSet taskList;
 
   @override
   _GetInputState createState() => _GetInputState();
 }
 
 class _GetInputState extends State<GetInput> {
-  final textEditingController = TextEditingController();
-  final FileManager fm = FileManager();
+  final TextEditingController textEditingController = TextEditingController();
 
   DateTime _date = DateTime.now();
   TimeOfDay _time = const TimeOfDay(hour: 23, minute: 59);
@@ -29,14 +26,14 @@ class _GetInputState extends State<GetInput> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Enter task"),
+        title: const Text('Enter task'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: <Widget>[
             TextField(
-              decoration: InputDecoration(labelText: "Task name"),
+              decoration: InputDecoration(labelText: 'Task name'),
               controller: textEditingController,
             ),
             DateTimePicker(
@@ -59,15 +56,10 @@ class _GetInputState extends State<GetInput> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          String text = textEditingController.text.trim();
-          if (text != "") {
-            this
-                .widget
-                .taskList
-                .add(Task.fromInput(text, this._date, this._time));
-            this.widget.taskList.sort();
+          final String text = textEditingController.text.trim();
+          if (text != '') {
+            widget.taskList.add(text, _date, _time);
           }
-          fm.writeToFile(this.widget.taskList);
           Navigator.pop(context);
         },
         child: Icon(Icons.save),

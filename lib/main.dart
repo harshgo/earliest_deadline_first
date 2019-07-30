@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'infinite_scroll_listview_task-14.dart';
 import 'filemanager.dart';
+import 'infinite_scroll_listview_task-14.dart';
+import 'task.dart';
 
 void main() => runApp(MyApp());
 
@@ -24,14 +25,14 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.red,
         ),
         //home: MyHomePage(title: 'Flutter Demo Home Page'),
-        home: FutureBuilder(
+        home: FutureBuilder<TaskSet>(
           future: FileManager().populateFromFile,
-          builder: (context, snapshot) {
+          builder: (BuildContext context, AsyncSnapshot<TaskSet> snapshot) {
             if (snapshot.connectionState == ConnectionState.done) {
-              return InfiniteScrollListView(listViewData: snapshot.data);
+              return InfiniteScrollListView(tasks: snapshot.data);
             } else {
               return Center(
-                  child: SizedBox(
+                  child: const SizedBox(
                       child: CircularProgressIndicator(),
                       height: 200.0,
                       width: 200.0));
