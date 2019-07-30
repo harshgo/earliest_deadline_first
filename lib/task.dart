@@ -25,7 +25,7 @@ class TaskSet with IterableMixin<Task> {
   Task operator [](int i) => tasks[i];
 
   void add(String name, DateTime date, [TimeOfDay time]) {
-    final Task task = Task(name, date);
+    final Task task = Task(name, date, time);
     _add(task);
   }
 
