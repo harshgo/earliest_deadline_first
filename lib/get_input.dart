@@ -24,8 +24,6 @@ class _GetInputState extends State<GetInput> {
 
   @override
   Widget build(BuildContext context) {
-    _date = DateTime.now();
-    _time = const TimeOfDay(hour: 23, minute: 59);
     return Scaffold(
       appBar: AppBar(
         title: const Text('Enter task'),

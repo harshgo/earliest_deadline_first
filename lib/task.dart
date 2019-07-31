@@ -42,6 +42,7 @@ class TaskSet with IterableMixin<Task> {
 }
 
 class Task implements Comparable<Task> {
+
   Task(this.name, DateTime date, [TimeOfDay time]) {
     if (time == null) {
       dateTime = date;
