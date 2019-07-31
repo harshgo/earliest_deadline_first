@@ -3,7 +3,6 @@ import 'task.dart';
 import 'task_editor_dialog.dart';
 
 class TaskTile extends StatefulWidget {
-
   const TaskTile(this._task, this._callback);
 
   final Function _callback;
@@ -16,7 +15,6 @@ class TaskTile extends StatefulWidget {
 
 class _TaskTileState extends State<TaskTile>
     with SingleTickerProviderStateMixin {
-
   _TaskTileState(this._task) : super();
 
   Task _task;
@@ -34,7 +32,16 @@ class _TaskTileState extends State<TaskTile>
     return widget._task.getTimeLeft();
   }
 
-
+  Color get timerDisplayColor {
+    final Duration difference = widget._task.dateTime.difference(DateTime.now());
+    if(difference < Duration(seconds: 0)) {
+      return Colors.red;
+    } else if (difference < Duration(hours: 2)) {
+      return Colors.amber;
+    } else {
+      return Colors.green;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -54,11 +61,15 @@ class _TaskTileState extends State<TaskTile>
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
                       Expanded(
-                        child: ListTile(title: Text('${widget._task.name}')),
+                        child: ListTile(
+                            title: Text(
+                          '${widget._task.name}',
+                        )),
                         flex: 8,
                       ),
                       Container(
-                        child: Text(timerDisplayString),
+                        child: Text(timerDisplayString,
+                            style: TextStyle(color: timerDisplayColor)),
                         padding: const EdgeInsets.all(10.0),
                       ),
                     ]),

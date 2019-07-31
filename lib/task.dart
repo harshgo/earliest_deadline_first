@@ -79,11 +79,10 @@ class Task implements Comparable<Task> {
     }
     final String hours = twoDigits(difference.inHours);
     final String minutes = twoDigits(difference.inMinutes.remainder(60));
-    final String seconds = twoDigits(difference.inSeconds.remainder(60));
     String result = '';
     if (negative) {
       result = '-';
     }
-    return result + '$hours:$minutes:$seconds';
+    return result + '$hours hrs $minutes mins';
   }
 }
