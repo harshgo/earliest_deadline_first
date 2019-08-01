@@ -24,6 +24,8 @@ class _TaskEditorDialogState extends State<TaskEditorDialog> {
   DateTime _date;
   TimeOfDay _time;
 
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
   void update() {
     widget._task.updateTime(_date, _time);
     widget._callback();
@@ -31,7 +33,6 @@ class _TaskEditorDialogState extends State<TaskEditorDialog> {
 
   @override
   Widget build(BuildContext context) {
-    final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
     final Size screenSize = MediaQuery.of(context).size;
     return AlertDialog(
       content: Form(
