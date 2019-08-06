@@ -4,6 +4,11 @@ import 'get_input.dart';
 import 'task.dart';
 import 'task_tile.dart';
 
+/* Thank you to
+ * https://inducesmile.com/google-flutter/how-to-create-an-infinite-scroll-with-listview-in-flutter/
+ * for boilerplate.
+ */
+
 class InfiniteScrollListView extends StatefulWidget {
   const InfiniteScrollListView({Key key, @required this.tasks})
       : super(key: key);
@@ -37,7 +42,7 @@ class _InfiniteScrollListViewState extends State<InfiniteScrollListView> {
           return Dismissible(
             // Each Dismissible must contain a Key. Keys allow Flutter to
             // uniquely identify widgets.
-            key: Key(item.hashCode.toString()),
+            key: Key(item.name),
             // Provide a function that tells the app
             // what to do after an item has been swiped away.
             onDismissed: (DismissDirection direction) async {
